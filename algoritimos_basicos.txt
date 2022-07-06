@@ -1,0 +1,79 @@
+operation clear(A){
+ 1: if zero A then goto 0 else goto 2
+ 2: do dec A goto 1
+}
+
+// A:=A+B (soma destrutiva)
+operation somaDes(A,B){
+  1: if zero B then goto 0 else goto 2
+  2: do dec B goto 3
+  3: do inc A goto 1
+}
+
+// A:=A+B (soma não-destrutiva)
+operation soma(A,B,C){
+  1: if zero B then goto 5 else goto 2
+  2: do dec B goto 3
+  3: do inc A goto 4
+  4: do inc C goto 1
+  5: if zero C then goto 0 else goto 6
+  6: do dec C goto 7
+  7: do inc B goto 5
+}
+
+// A:=C, B:=C usando D(carregamento duplo não-destrutivo)
+operation loadDois(A,B,C,D){
+  1: if zero C then goto 6 else goto 2
+  2: do dec C goto 3
+  3: do inc A goto 4
+  4: do inc B goto 5
+  5: do inc D goto 1
+  6: if zero D then goto 0 else goto 7
+  7: do dec D goto 8
+  8: do inc C goto 6
+}
+
+operation load(A,B){
+  1: do clear(A) goto 2
+  2: do somaDes(A,B) goto 0
+}
+
+// Testa divisibilidade por 2 (usar nova flag)
+// Retorna 1 em FLAG se A/2, 0 se não
+operation testDivDois(A, C, FLAG){
+ 1: do load(C, A) goto 2
+ 2: if zero C then goto 8 else goto 3
+ 3: do dec C goto 4
+ 4: do inc A goto 5
+ 5: if zero C then goto 0 else goto 6
+ 6: do dec C goto 7
+ 7: do inc A goto 2
+ 8: do inc FLAG goto 0
+}
+
+// Divide por 2 A:=A/2, B:= resto
+operation divDoisResto(A, B){
+	1: do load(B,A) goto 2
+	2: if zero B then goto 0 else goto 3
+	3: do dec B goto 4
+	4: if zero B then goto 7 else goto 5
+	5: do dec B goto 6
+	6: do inc A goto 2
+	7: do inc C goto 0
+}
+// Divide por 2 A:=A/2,
+operation divDois(A, B){
+	1: do load(B,A) goto 2
+	2: if zero B then goto 0 else goto 3
+	3: do dec B goto 4
+	4: if zero B then goto 0 else goto 5
+	5: do dec B goto 6
+	6: do inc A goto 2
+	
+// A:= AxB usando C
+operation mult(A, B, C){
+	1: do load(C,A) goto 2
+	2: if zero C then goto 0 else goto 3
+	3: do soma(A,B,D) goto 4
+	4: do dec C goto 2
+}
