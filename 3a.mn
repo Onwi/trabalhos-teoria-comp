@@ -1,3 +1,4 @@
+// Limpa o registrador 
 operation clear(A){
  1: if zero A then goto 0 else goto 2
  2: do dec A goto 1
@@ -33,22 +34,23 @@ operation loadDois(A,B,C,D){
   8: do inc C goto 6
 }
 
+// A:= B
 operation load(A,B){
   1: do clear(A) goto 2
   2: do somaDes(A,B) goto 0
 }
 
-// Testa divisibilidade por 2 (usar nova flag)
-// Retorna 1 em FLAG se A/2, 0 se não
+// Testa divisibilidade por 2 (usar nova flag) Retorna 1 em FLAG se A/2, 0 se não
 operation testDivDois(A, C, FLAG){
  1: do load(C, A) goto 2
- 2: if zero C then goto 8 else goto 3
- 3: do dec C goto 4
- 4: do inc A goto 5
- 5: if zero C then goto 0 else goto 6
- 6: do dec C goto 7
- 7: do inc A goto 2
- 8: do inc FLAG goto 0
+ 2: do clear(FLAG)  goto 3
+ 3: if zero C then goto 9 else goto 4
+ 4: do dec C goto 5
+ 5: do inc A goto 6
+ 6: if zero C then goto 0 else goto 7
+ 7: do dec C goto 8
+ 8: do inc A goto 3
+ 9: do inc FLAG goto 0
 }
 
 // Divide por 2 A:=A/2, B:= resto
@@ -61,6 +63,7 @@ operation divDoisResto(A, B){
 	6: do inc A goto 2
 	7: do inc C goto 0
 }
+
 // Divide por 2 A:=A/2,
 operation divDois(A, B){
 	1: do load(B,A) goto 2
@@ -69,11 +72,61 @@ operation divDois(A, B){
 	4: if zero B then goto 0 else goto 5
 	5: do dec B goto 6
 	6: do inc A goto 2
-	
+}
+
 // A:= AxB usando C
 operation mult(A, B, C){
 	1: do load(C,A) goto 2
 	2: if zero C then goto 0 else goto 3
 	3: do soma(A,B,D) goto 4
 	4: do dec C goto 2
+}
+
+// A:= Ax2 using C
+operation multDois(A, C){
+	1: do load(C,A) goto 2
+	2: if zero C then goto 0 else goto 3
+	3: do inc A goto 4
+	4: do inc A goto 5
+	5: do dec C goto 2
+}
+
+//A := 2^b using C, D
+operation expo(A, B, C, D){
+	1: do clear(A) goto 2
+	2: do clear(C) goto 3
+	3: do clear(D) goto 4
+	4: do inc A goto 5
+	5: do soma(D, B, C) goto 6
+	6: if zero D then goto 0 else goto 7
+	7: do multDois(A, C) goto 8
+	8: do dec D goto 6
+}
+
+// Decode using A, B := dec(X) 
+operation decode(X, A, B, C, D){
+	1: 	if zero X then goto 0 else goto 2
+	2:	do soma(B, X, D) goto 3
+	3:	do testDivDois(B, C, D) goto 4
+	4:	if zero D then goto 7 else goto 5
+	5: 	do divDois(B, C) goto 6
+	6: 	do inc A goto 3
+	7:	do dec B goto 8
+	8: 	do divDois(B, C) goto 0
+}
+
+// Encode using C := enc(A, B) 
+operation encode(Y, A, B, C, D){
+	1: do clear(Y) goto 2
+	2: do expo(Y, A, C, D) goto 3
+	3: do multDois(B, C) goto 4
+	4: do inc B goto 5
+	5: do mult(Y, B, C) goto 0
+}
+
+main{
+	1: do decode(X, A, B, C, D) goto 2
+	2: do multDois(A, C) goto 3
+	3: do mult(A, B, C) goto 5
+	5: do load(Y,A) goto 0
 }
