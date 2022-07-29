@@ -1,0 +1,64 @@
+let
+
+    true = \x y. x;
+    false = \x y. y;
+    
+    if = \b e1 e2. b e1 e2;
+
+    not = \b. b false true;
+
+    and = \b1 b2. if b1 b2 false;
+
+    or = \b1 b2. if b1 true b2;
+
+    succ = \n. \A B. A (n A B);
+
+    --add = \n1 n2. n1 succ n2;
+    add = \n1 n2. \A B. n1 A (n2 A B);
+
+    mult = \n1 n2. n1 (\x. add n2 x) 0;
+
+    isZero = \n. n (\x. false) true;
+    isPos = \n. not (isZero n); 
+
+    lt = \a b. isPos (sub a b);
+    gt = \a b. isPos(sub a b);
+    leq = \a b. not (gt a b);
+    geq = \a b. not (lt a b);
+
+    pair = \a b. \c. c a b;
+    fst = \p. p true;
+    snd = \p. p false;
+
+    swap = \p. pair (snd p) (fst p);
+    shiftInc = \p. pair (snd p) (succ (snd p));
+ 
+    -- (pred n) calcula n-1 se n>0, n se n=0 
+    pred = \n. fst (n shiftInc (pair 0 0));
+
+    -- (sub a b) calcula a - b
+    sub = \a b. b pred a;
+
+    -- (menor a b) testa a < b
+    menor = \a b. isPos (sub b a);
+    
+    empty = \x. true;
+    cons = pair;
+
+    isEmpty = \l. l (\a b. false);
+    head = fst;
+    tail = snd;
+
+----- QUESTÕES DO TRABALHO -------
+
+    igual = \a b. if (menor a b) false (if (menor b a) false true);
+    
+    polinomio = \a b. add (mult a a) (mult 3 b);
+
+
+
+    invFrac = \p. if (menor 0 (fst p)) (swap p) (pair (fst p) (snd p));
+
+in
+
+    invFrac (pair 1 5)
