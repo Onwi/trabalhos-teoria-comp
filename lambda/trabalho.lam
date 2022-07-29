@@ -59,6 +59,10 @@ let
 
     invFrac = \p. if (menor 0 (fst p)) (swap p) (pair (fst p) (snd p));
 
+    multFrac = \p q. pair (mult (fst p) (fst q)) (mult (snd p) (snd q));
+
+    somaFrac = \p q. pair (add (mult (fst p) (snd q)) ((mult (snd p) (fst q)))) (mult (snd p) (snd q));
+
 in
 
-    invFrac (pair 1 5)
+    somaFrac (pair 1 1) (pair 0 3)
