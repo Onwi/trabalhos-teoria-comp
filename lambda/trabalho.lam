@@ -49,13 +49,18 @@ let
     head = fst;
     tail = snd;
 
+    --sucessão de modulo 4
+    mod4 = \x. if (isZero (sub 3 x)) zero (succ x);
+    --(a, b) -> (a+b, a)
+    addShift = \p. pair (add (fst p) (snd p)) (fst p);
+    
 ----- QUESTÕES DO TRABALHO -------
 
     igual = \a b. if (menor a b) false (if (menor b a) false true);
     
     polinomio = \a b. add (mult a a) (mult 3 b);
 
-
+    multQuatro = \x. isZero (x mod4 zero);
 
     invFrac = \p. if (menor 0 (fst p)) (swap p) (pair (fst p) (snd p));
 
@@ -63,6 +68,9 @@ let
 
     somaFrac = \p q. pair (add (mult (fst p) (snd q)) ((mult (snd p) (fst q)))) (mult (snd p) (snd q));
 
+    lucas = \n. snd (n addShift (pair 1 2));
+    
 in
 
     somaFrac (pair 1 1) (pair 0 3)
+    
