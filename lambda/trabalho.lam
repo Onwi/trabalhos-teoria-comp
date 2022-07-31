@@ -11,6 +11,8 @@ let
 
     or = \b1 b2. if b1 true b2;
 
+	zero = \f x. x;
+
     succ = \n. \A B. A (n A B);
 
     --add = \n1 n2. n1 succ n2;
